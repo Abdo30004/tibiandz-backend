@@ -13,7 +13,7 @@ export function validator(req: Request, res: Response, next: NextFunction) {
           .map((e, i) => `${i + 1}.${e.msg}`)
           .join("\n")
     );
-    return res.status(StatusCodes.BAD_REQUEST).json({ errors: errors.array() });
+    return res.status(StatusCodes.BAD_REQUEST).json(errorResponse);
   }
   next();
 }

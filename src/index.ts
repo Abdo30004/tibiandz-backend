@@ -4,6 +4,8 @@ import helmet from "helmet";
 import cors from "cors";
 import { setupRouters } from "./routes/main";
 import { ErrorHandler } from "./middlewares/errors";
+import { connect } from "./database/connect";
+
 import "dotenv/config";
 
 const app = express();
@@ -22,6 +24,12 @@ app.use(ErrorHandler.notFound);
 
 app.use(ErrorHandler.internalServerError);
 
-app.listen(Number(process.env.PORT), () => {
-  console.log(`Server is running on http://localhost:${process.env.PORT}`);
-});
+async function startServer() {
+  await connect();
+
+  app.listen(Number(process.env.PORT), () => {
+    console.log(`Server is running on http://localhost:${process.env.PORT}`);
+  });
+}
+
+startServer();

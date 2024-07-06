@@ -24,7 +24,10 @@ export class ErrorResponse {
   public error: string | null = null;
   public success: boolean = false;
 
-  constructor() {}
+  constructor(responseData?: ErrorResponseData) {
+    if (!responseData) return;
+    this.error = responseData.error;
+  }
 
   public setError(error: string): ErrorResponse {
     this.error = error;

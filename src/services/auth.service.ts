@@ -1,4 +1,4 @@
-import { AdminModel } from "../database/models/admin";
+import { AdminModel } from "../database/models/admin.model";
 import { HashUtil } from "../utils/hash";
 import { JwtUtil } from "../utils/jwt";
 

@@ -1,4 +1,4 @@
-import { LogoModel } from "../database/models/logo";
+import { LogoModel } from "../database/models/logo.model";
 import { Logo } from "../types/database";
 
 export class LogoService {
