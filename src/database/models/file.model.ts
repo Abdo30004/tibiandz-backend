@@ -1,35 +1,35 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose';
 
-import { File } from "../../types/database";
+import type { File } from '../../types/database';
 
 const fileSchema = new Schema<File>(
   {
     name: {
       type: String,
-      required: true,
+      required: true
     },
 
     link: {
       type: String,
-      required: true,
+      required: true
     },
 
     type: {
       type: String,
-      enum: ["svg", "ai", "eps"],
-      required: true,
+      enum: ['svg', 'ai', 'eps'],
+      required: true
     },
 
     size: {
       type: Number,
-      required: true,
-    },
+      required: true
+    }
   },
 
   {
     timestamps: true,
-    versionKey: false,
+    versionKey: false
   }
 );
 
-export const FileModel = model("files", fileSchema);
+export const FileModel = model<File>('files', fileSchema);

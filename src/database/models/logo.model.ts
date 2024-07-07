@@ -1,64 +1,66 @@
-import { Schema, model } from "mongoose";
-import { Logo } from "../../types/database";
-import { FileModel } from "./file.model";
+import { Schema, model } from 'mongoose';
+
+import { FileModel } from './file.model';
+
+import type { Logo } from '../../types/database';
+
 const logoSchema = new Schema<Logo>(
   {
     name: {
       type: String,
-      required: true,
+      required: true
     },
 
     description: {
       type: String,
-      required: true,
+      required: true
     },
 
     approved: {
       type: Boolean,
-      default: false,
+      default: false
     },
 
     author: {
       type: String,
-      required: true,
+      required: true
     },
 
     email: {
       type: String,
-      required: true,
+      required: true
     },
 
     label: {
       type: String,
-      enum: ["new", "old", "none"],
-      default: "new",
+      enum: ['new', 'old', 'none'],
+      default: 'new'
     },
 
     tags: {
       type: [String],
-      default: [],
+      default: []
     },
 
     fileId: {
       type: String,
       required: true,
-      ref: "files",
-    },
+      ref: 'files'
+    }
   },
 
   {
     timestamps: true,
-    versionKey: false,
+    versionKey: false
   }
 );
 
-logoSchema.pre("save", async function (next) {
-  const logo = this;
-  const file = await FileModel.findById(logo.fileId);
+logoSchema.pre('save', async function (next) {
+  const file = await FileModel.findById(this.fileId);
   if (!file) {
-    throw new Error("File not found");
+    throw new Error('File not found');
   }
   next();
 });
 
-export const LogoModel = model<Logo>("logos", logoSchema);
+export const LogoModel = model<Logo>('logos', logoSchema);

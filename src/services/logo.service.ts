@@ -1,10 +1,15 @@
-import { LogoModel } from "../database/models/logo.model";
-import { Logo } from "../types/database";
+import { LogoModel } from '../database/models/logo.model';
+
+import type { Logo } from '../types/database';
+
 
 export class LogoService {
-  static async getAll() {
+  static async getAll(page: number, limit: number) {
     try {
-      const logos = await LogoModel.find();
+      const logos = await LogoModel.find()
+        .skip((page - 1) * limit)
+        .limit(limit);
+
       return logos;
     } catch {
       return null;
@@ -32,7 +37,7 @@ export class LogoService {
   static async update(id: string, logoData: Partial<Logo>) {
     try {
       const logo = await LogoModel.findByIdAndUpdate(id, logoData, {
-        new: true,
+        new: true
       });
       return logo;
     } catch {
@@ -52,11 +57,7 @@ export class LogoService {
 
   static async approve(id: string) {
     try {
-      const logo = await LogoModel.findByIdAndUpdate(
-        id,
-        { approved: true },
-        { new: true }
-      );
+      await LogoModel.updateOne({ _id: id }, { approved: true });
       return true;
     } catch {
       return false;
@@ -65,11 +66,7 @@ export class LogoService {
 
   static async reject(id: string) {
     try {
-      const logo = await LogoModel.findByIdAndUpdate(
-        id,
-        { approved: false },
-        { new: true }
-      );
+      await LogoModel.updateOne({ _id: id }, { approved: false });
 
       return true;
     } catch {

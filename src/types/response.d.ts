@@ -1,10 +1,8 @@
-
-interface SuccessResponseData<T> {
+export declare interface SuccessResponseData<T> {
   data: T | null;
   message: string | null;
 }
 
-interface ErrorResponseData {
+export declare interface ErrorResponseData {
   error: string | null;
 }
-

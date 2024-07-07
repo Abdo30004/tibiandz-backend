@@ -1,3 +1,5 @@
+import type { ErrorResponseData, SuccessResponseData } from '../types/response';
+
 export class SuccessResponse<T> {
   public data: T | null = null;
   public message: string | null = null;

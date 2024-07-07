@@ -1,5 +1,5 @@
-namespace NodeJS {
-  interface ProcessEnv {
+declare namespace NodeJS {
+  declare interface ProcessEnv {
     MONGODB_URI: string;
     PORT: string;
     JWT_SECRET: string;

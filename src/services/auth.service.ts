@@ -1,10 +1,10 @@
-import { AdminModel } from "../database/models/admin.model";
-import { HashUtil } from "../utils/hash";
-import { JwtUtil } from "../utils/jwt";
+import { AdminModel } from '../database/models/admin.model';
+import { HashUtil } from '../utils/hash';
+import { JwtUtil } from '../utils/jwt';
 
 export class AuthService {
   static async login(email: string, password: string) {
-    const admin = await AdminModel.findOne({ email }).catch((err) => null);
+    const admin = await AdminModel.findOne({ email }).catch(err => null);
 
     if (!admin) {
       return null;

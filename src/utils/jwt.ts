@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
 export class JwtUtil {
   private static secret = process.env.JWT_SECRET;
@@ -11,7 +11,7 @@ export class JwtUtil {
   static verifyToken(token: string) {
     try {
       const payload = jwt.verify(token, this.secret);
-      return payload;
+      return payload as { id: string };
     } catch (error) {
       return null;
     }

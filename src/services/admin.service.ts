@@ -1,7 +1,8 @@
-import { AdminModel } from "../database/models/admin.model";
-import { Admin } from "../types/database";
+import { AdminModel } from '../database/models/admin.model';
 
-class AdminService {
+import type { Admin } from '../types/database';
+
+export class AdminService {
   async getAll() {
     const admins = await AdminModel.find();
     return admins;
@@ -19,7 +20,7 @@ class AdminService {
 
   async update(id: string, adminData: Partial<Admin>) {
     const admin = await AdminModel.findByIdAndUpdate(id, adminData, {
-      new: true,
+      new: true
     });
 
     return admin;

@@ -1,24 +1,24 @@
-import { Schema,model} from "mongoose";
-import { Admin } from "../../types/database";
+import { Schema, model } from 'mongoose';
+
+import type { Admin } from '../../types/database';
 
 export const adminSchema = new Schema<Admin>(
   {
     email: {
       type: String,
-      required: true,
+      required: true
     },
 
     password: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
 
   {
     timestamps: true,
-    versionKey: false,
+    versionKey: false
   }
 );
 
-
-export const AdminModel = model("admins", adminSchema);
+export const AdminModel = model<Admin>('admins', adminSchema);
