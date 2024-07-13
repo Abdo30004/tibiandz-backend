@@ -1,7 +1,7 @@
+import { FileModel } from '../database/models/file.model';
 import { LogoModel } from '../database/models/logo.model';
 
 import type { Logo } from '../types/database';
-
 
 export class LogoService {
   static async getAll(page: number, limit: number) {
@@ -27,6 +27,12 @@ export class LogoService {
 
   static async create(logoData: Logo) {
     try {
+      const file = await FileModel.findById(logoData.fileId);
+
+      if (!file) {
+        return null;
+      }
+
       const logo = await LogoModel.create(logoData);
       return logo;
     } catch {

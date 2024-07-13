@@ -11,12 +11,14 @@ export const routerConfig = {
 
 const { router } = routerConfig;
 
-router.route('/').get().post(LogoValidator.create, validator, LogoController.createLogo);
+router.route('/').get(LogoController.getAllLogos).post(LogoValidator.create, validator, LogoController.createLogo);
 
 router
   .route('/:id')
-  .all(LogoValidator.byId, validator)
+  .all(LogoValidator.byId, validator) //for all methods
+  .get(LogoController.getLogoById)
+  .put(LogoValidator.update, validator, LogoController.updateLogo)
+  .delete(LogoController.deleteLogo);
 
-  .get()
-  .put()
-  .delete();
+router.route('/:id/approve').post(LogoValidator.byId, validator, LogoController.approveLogo);
+router.route('/:id/reject').post(LogoValidator.byId, validator, LogoController.rejectLogo);

@@ -43,4 +43,10 @@ export class FileController {
 
     return res.status(StatusCodes.OK).json(successResponse);
   }
+
+  static async getById(req: Request, res: Response) {
+    const id = req.params.id;
+
+    //const file = await FileModel
+  }
 }

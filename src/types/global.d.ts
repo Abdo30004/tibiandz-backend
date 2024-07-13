@@ -7,6 +7,8 @@ declare namespace NodeJS {
     CLOUDINARY_CLOUD_NAME: string;
     CLOUDINARY_API_KEY: string;
     CLOUDINARY_API_SECRET: string;
+    EMAIL_PASSWORD: string;
+    EMAIL_USER: string;
 
     [key: string]: null | undefined;
   }

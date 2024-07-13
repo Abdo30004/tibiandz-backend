@@ -25,6 +25,23 @@ export class LogoController {
 
     res.json(successResponse);
   }
+  static async getLogoById(req: Request, res: Response) {
+    const id = req.params.id;
+
+    const logo = await LogoService.getById(id);
+
+    if (!logo) {
+      const errorResponse = new ErrorResponse().setError('Logo not found');
+      return res.status(StatusCodes.NOT_FOUND).json(errorResponse);
+    }
+
+    const successResponse = new SuccessResponse({
+      message: 'Logo fetched successfully',
+      data: logo
+    });
+
+    res.json(successResponse);
+  }
 
   static async createLogo(req: Request, res: Response) {
     const logoData = req.body as Logo;
@@ -38,24 +55,6 @@ export class LogoController {
 
     const successResponse = new SuccessResponse({
       message: 'Logo created successfully',
-      data: logo
-    });
-
-    res.json(successResponse);
-  }
-
-  static async getLogoById(req: Request, res: Response) {
-    const id = req.params.id;
-
-    const logo = await LogoService.getById(id);
-
-    if (!logo) {
-      const errorResponse = new ErrorResponse().setError('Logo not found');
-      return res.status(StatusCodes.NOT_FOUND).json(errorResponse);
-    }
-
-    const successResponse = new SuccessResponse({
-      message: 'Logo fetched successfully',
       data: logo
     });
 
@@ -76,6 +75,60 @@ export class LogoController {
     const successResponse = new SuccessResponse({
       message: 'Logo updated successfully',
       data: logo
+    });
+
+    res.json(successResponse);
+  }
+
+  static async deleteLogo(req: Request, res: Response) {
+    const id = req.params.id;
+
+    const logo = await LogoService.delete(id);
+
+    if (!logo) {
+      const errorResponse = new ErrorResponse().setError('Error deleting logo');
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(errorResponse);
+    }
+
+    const successResponse = new SuccessResponse({
+      message: 'Logo deleted successfully',
+      data: logo
+    });
+
+    res.json(successResponse);
+  }
+
+  static async approveLogo(req: Request, res: Response) {
+    const id = req.params.id;
+
+    const result = await LogoService.approve(id);
+
+    if (!result) {
+      const errorResponse = new ErrorResponse().setError('Error approving logo');
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(errorResponse);
+    }
+
+    const successResponse = new SuccessResponse({
+      message: 'Logo approved successfully',
+      data: result
+    });
+
+    res.json(successResponse);
+  }
+
+  static async rejectLogo(req: Request, res: Response) {
+    const id = req.params.id;
+
+    const result = await LogoService.reject(id);
+
+    if (!result) {
+      const errorResponse = new ErrorResponse().setError('Error rejecting logo');
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(errorResponse);
+    }
+
+    const successResponse = new SuccessResponse({
+      message: 'Logo rejected successfully',
+      data: result
     });
 
     res.json(successResponse);
