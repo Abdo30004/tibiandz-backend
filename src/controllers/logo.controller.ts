@@ -45,6 +45,7 @@ export class LogoController {
 
   static async createLogo(req: Request, res: Response) {
     const logoData = req.body as Logo;
+    console.log(logoData);
 
     const logo = await LogoService.create(logoData);
 
@@ -129,6 +130,42 @@ export class LogoController {
     const successResponse = new SuccessResponse({
       message: 'Logo rejected successfully',
       data: result
+    });
+
+    res.json(successResponse);
+  }
+
+  static async searchLogo(req: Request, res: Response) {
+    const query = req.query.q as string;
+
+    const logos = await LogoService.search(query);
+
+    if (!logos) {
+      const errorResponse = new ErrorResponse().setError('Error searching logos');
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(errorResponse);
+    }
+
+    const successResponse = new SuccessResponse({
+      message: 'Logos fetched successfully',
+      data: logos
+    });
+
+    res.json(successResponse);
+  }
+
+  static async autoCompleteLogo(req: Request, res: Response) {
+    const query = req.query.q as string;
+
+    const logos = await LogoService.autoComplete(query);
+
+    if (!logos) {
+      const errorResponse = new ErrorResponse().setError('Error fetching logos');
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(errorResponse);
+    }
+
+    const successResponse = new SuccessResponse({
+      message: 'Logos fetched successfully',
+      data: logos
     });
 
     res.json(successResponse);

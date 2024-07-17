@@ -10,4 +10,5 @@ export const routerConfig = {
 
 const { router } = routerConfig;
 
-router.post('/upload', upload.single('logo'), FileController.upload);
+router.get('/:id', FileController.getById);
+router.post('/upload', upload.single('logo'), FileController.upload); //fileID

@@ -15,14 +15,14 @@ export class LogoValidator {
         min: 1
       })
       .withMessage('Invalid limit number')
-  ];
+  ]; 
 
   static submit = [
-    body('name').isString().withMessage('Invalid name'),
-    body('description').isString().withMessage('Invalid description'),
-    body('email').isEmail().withMessage('Invalid email'),
-    body('author').isString().withMessage('Invalid author'),
-    body('fileId').isMongoId().withMessage('Invalid fileId')
+    body('name').isString().notEmpty().withMessage('Invalid name'),
+    body('description').isString().notEmpty().withMessage('Invalid description'),
+    body('email').isEmail().notEmpty().withMessage('Invalid email'),
+    body('author').isString().notEmpty().withMessage('Invalid author'),
+    body('fileId').isMongoId().notEmpty().withMessage('Invalid fileId')
   ];
 
   static create = [
@@ -33,4 +33,8 @@ export class LogoValidator {
   ];
 
   static update = [...LogoValidator.byId, ...LogoValidator.submit.map(validator => validator.optional())];
+
+  static autocomplete = [query('q').isString().notEmpty().withMessage('Invalid search query')];
+
+  static search = [...LogoValidator.autocomplete, ...LogoValidator.getAll];
 }

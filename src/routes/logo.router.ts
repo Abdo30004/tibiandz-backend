@@ -11,8 +11,13 @@ export const routerConfig = {
 
 const { router } = routerConfig;
 
-router.route('/').get(LogoController.getAllLogos).post(LogoValidator.create, validator, LogoController.createLogo);
+router
+  .route('/')
+  .get(LogoValidator.getAll, validator, LogoController.getAllLogos)
+  .post(LogoValidator.create, validator, LogoController.createLogo);
 
+router.route('/search').get(LogoValidator.search, validator, LogoController.searchLogo);
+router.route('/autocomplete').get(LogoValidator.autocomplete, validator, LogoController.autoCompleteLogo);
 router
   .route('/:id')
   .all(LogoValidator.byId, validator) //for all methods

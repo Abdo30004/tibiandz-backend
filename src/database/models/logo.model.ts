@@ -45,6 +45,7 @@ const logoSchema = new Schema<Logo>(
     fileId: {
       type: String,
       required: true,
+      unique: true,
       ref: 'files'
     }
   },
@@ -56,6 +57,8 @@ const logoSchema = new Schema<Logo>(
 );
 
 logoSchema.pre('save', async function (next) {
+  if (!this.isModified('fileId')) return next();
+
   const file = await FileModel.findById(this.fileId);
   if (!file) {
     throw new Error('File not found');
@@ -64,3 +67,4 @@ logoSchema.pre('save', async function (next) {
 });
 
 export const LogoModel = model<Logo>('logos', logoSchema);
+

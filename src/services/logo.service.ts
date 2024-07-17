@@ -2,6 +2,7 @@ import { FileModel } from '../database/models/file.model';
 import { LogoModel } from '../database/models/logo.model';
 
 import type { Logo } from '../types/database';
+import { FileService } from './file.service';
 
 export class LogoService {
   static async getAll(page: number, limit: number) {
@@ -27,15 +28,17 @@ export class LogoService {
 
   static async create(logoData: Logo) {
     try {
-      const file = await FileModel.findById(logoData.fileId);
-
+      const file = await FileModel.findById({ _id: logoData.fileId });
+      console.log(file);
       if (!file) {
+        console.log('File not found');
         return null;
       }
 
       const logo = await LogoModel.create(logoData);
       return logo;
-    } catch {
+    } catch (err) {
+      console.log(err);
       return null;
     }
   }
@@ -54,10 +57,14 @@ export class LogoService {
   static async delete(id: string) {
     try {
       const logo = await LogoModel.findByIdAndDelete(id);
+      if (!logo) {
+        return false;
+      }
+      await FileService.delete(logo.fileId);
 
-      return logo;
+      return true;
     } catch {
-      return null;
+      return false;
     }
   }
 
@@ -77,6 +84,30 @@ export class LogoService {
       return true;
     } catch {
       return false;
+    }
+  }
+
+  static async search(query: string): Promise<Logo[] | null> {
+    try {
+      const logos = await LogoModel.find({
+        $or: [{ name: { $regex: query, $options: 'i' } }, { description: { $regex: query, $options: 'i' } }]
+      });
+
+      return logos;
+    } catch {
+      return null;
+    }
+  }
+
+  static async autoComplete(query: string): Promise<string[] | null> {
+    try {
+      const logos = await LogoModel.find({
+        name: { $regex: query, $options: 'i' }
+      }).limit(10);
+
+      return logos.map(logo => logo.name);
+    } catch {
+      return null;
     }
   }
 }

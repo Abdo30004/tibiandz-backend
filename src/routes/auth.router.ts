@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import { AuthController } from '../controllers/auth.controller';
+import { validator } from '../middlewares/validator.middleware';
 import { AuthValidator } from '../middlewares/validators/auth.validator';
 
 export const routerConfig = {
@@ -10,4 +11,4 @@ export const routerConfig = {
 
 const { router } = routerConfig;
 
-router.post('/login', AuthValidator.login, AuthController.login);
+router.post('/login', AuthValidator.login, validator, AuthController.login); // /auth/login

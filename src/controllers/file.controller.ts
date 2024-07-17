@@ -1,10 +1,12 @@
+import fs from 'fs/promises';
 import { StatusCodes } from 'http-status-codes';
 import path from 'path';
 
-import { CloudinaryUtil } from '../utils/cloudinary';
+import { FileService } from '../services/file.service';
 import { ErrorResponse, SuccessResponse } from '../utils/response';
 
 import type { Request, Response } from 'express';
+
 export class FileController {
   static async upload(req: Request, res: Response) {
     const file = req.file;
@@ -34,7 +36,16 @@ export class FileController {
       return res.status(StatusCodes.BAD_REQUEST).json(errorResponse);
     }
 
-    const fileData = await CloudinaryUtil.uploadFileToCloud(file);
+    const fileData = await FileService.upload(file);
+
+    await fs.unlink(file.path);
+
+    if (!fileData) {
+      const errorResponse = new ErrorResponse({
+        error: 'Error uploading file'
+      });
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(errorResponse);
+    }
 
     const successResponse = new SuccessResponse({
       message: 'File uploaded successfully',
@@ -47,6 +58,20 @@ export class FileController {
   static async getById(req: Request, res: Response) {
     const id = req.params.id;
 
-    //const file = await FileModel
+    const file = await FileService.getById(id);
+
+    if (!file) {
+      const errorResponse = new ErrorResponse({
+        error: 'File not found'
+      });
+      return res.status(StatusCodes.NOT_FOUND).json(errorResponse);
+    }
+
+    const successResponse = new SuccessResponse({
+      message: 'File fetched successfully',
+      data: file
+    });
+
+    res.json(successResponse);
   }
 }

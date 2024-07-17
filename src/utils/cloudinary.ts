@@ -1,38 +1,29 @@
-import { v2 as cloudinary } from 'cloudinary';
-import { unlink } from 'fs/promises';
-import path from 'path';
+import 'dotenv/config';
 
-import { FileModel } from '../database/models/file.model';
+import { v2 as cloudinary } from 'cloudinary';
 
 import type { Express } from 'express';
 
 export class CloudinaryUtil {
-  static async uploadFileToCloud(file: Express.Multer.File) {
+  static async uploadFileToCloud(file: Express.Multer.File, id: string) {
     cloudinary.config({
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
       api_key: process.env.CLOUDINARY_API_KEY,
       api_secret: process.env.CLOUDINARY_API_SECRET,
       secure: true
     });
-
-    const extention = path.extname(file.originalname).slice(1);
-
-    const newFile = new FileModel({
-      name: file.originalname,
-      size: file.size,
-      type: extention
-    });
-
     const result = await cloudinary.uploader.upload(file.path, {
       folder: 'uploads',
       resource_type: 'image',
-      public_id: newFile.id
+      public_id: id
     });
 
-    newFile.link = result.secure_url;
-    await newFile.save();
 
-    await unlink(file.path);
-    return newFile;
+    return result;
+  }
+
+  static async deleteFileFromCloud(id: string) {
+    const result = await cloudinary.uploader.destroy(id);
+    return true;
   }
 }

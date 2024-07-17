@@ -11,6 +11,8 @@
     "compile": "tsc",
     "build": "npm run clean && npm run compile",
     "format": "prettier --write src/**/*.ts",
+    "seed": "ts-node -T src/utils/seed.ts",
+    "swagger": "ts-node -T src/docs/swagger.ts",
     "lint:check": "eslint . --ext .ts --ignore-path .gitignore",
     "lint:fix": "npm run lint:check -- --fix"
   },
@@ -36,6 +38,7 @@
     "node": ">=16.0.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",

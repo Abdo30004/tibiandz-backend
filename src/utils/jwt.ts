@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import 'dotenv/config';
 
 export class JwtUtil {
   private static secret = process.env.JWT_SECRET;
