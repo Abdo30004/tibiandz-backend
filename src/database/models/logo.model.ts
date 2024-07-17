@@ -67,4 +67,3 @@ logoSchema.pre('save', async function (next) {
 });
 
 export const LogoModel = model<Logo>('logos', logoSchema);
-

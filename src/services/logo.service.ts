@@ -1,8 +1,8 @@
+import { FileService } from './file.service';
 import { FileModel } from '../database/models/file.model';
 import { LogoModel } from '../database/models/logo.model';
 
 import type { Logo } from '../types/database';
-import { FileService } from './file.service';
 
 export class LogoService {
   static async getAll(page: number, limit: number) {
