@@ -39,7 +39,7 @@ export class FileService {
 
   static async delete(id: string) {
     try {
-      const file = await FileModel.findByIdAndDelete(id);
+      await FileModel.findByIdAndDelete(id);
       await CloudinaryUtil.deleteFileFromCloud(id);
       return true;
     } catch {

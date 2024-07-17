@@ -3,7 +3,6 @@ import { Schema, model } from 'mongoose';
 import { FileModel } from './file.model';
 
 import type { Logo } from '../../types/database';
-
 const logoSchema = new Schema<Logo>(
   {
     name: {
@@ -28,6 +27,7 @@ const logoSchema = new Schema<Logo>(
 
     email: {
       type: String,
+      match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       required: true
     },
 
@@ -61,10 +61,10 @@ logoSchema.pre('save', async function (next) {
 
   const file = await FileModel.findById(this.fileId);
   if (!file) {
-    throw new Error('File not found');
+    return next(new Error('File not found'));
   }
+
   next();
 });
 
 export const LogoModel = model<Logo>('logos', logoSchema);
-

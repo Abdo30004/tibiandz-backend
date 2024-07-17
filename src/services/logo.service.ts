@@ -1,8 +1,8 @@
+import { FileService } from './file.service';
 import { FileModel } from '../database/models/file.model';
 import { LogoModel } from '../database/models/logo.model';
 
 import type { Logo } from '../types/database';
-import { FileService } from './file.service';
 
 export class LogoService {
   static async getAll(page: number, limit: number) {
@@ -46,11 +46,16 @@ export class LogoService {
   static async update(id: string, logoData: Partial<Logo>) {
     try {
       const logo = await LogoModel.findByIdAndUpdate(id, logoData, {
-        new: true
+        new: false
       });
-      return logo;
+
+      if (logo && logo.fileId !== logoData.fileId) {
+        await FileService.delete(logo.fileId);
+      }
+
+      return true;
     } catch {
-      return null;
+      return false;
     }
   }
 

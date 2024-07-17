@@ -1,5 +1,5 @@
 export declare interface SuccessResponseData<T> {
-  data: T | null;
+  data?: T | null;
   message: string | null;
 }
 

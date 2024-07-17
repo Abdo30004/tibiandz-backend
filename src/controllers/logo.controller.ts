@@ -74,8 +74,8 @@ export class LogoController {
     }
 
     const successResponse = new SuccessResponse({
-      message: 'Logo updated successfully',
-      data: logo
+      message: 'Logo updated successfully'
+      //data: logo
     });
 
     res.json(successResponse);

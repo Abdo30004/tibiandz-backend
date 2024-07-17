@@ -1,7 +1,7 @@
 import type { ErrorResponseData, SuccessResponseData } from '../types/response';
 
 export class SuccessResponse<T> {
-  public data: T | null = null;
+  public data: T | null | undefined = undefined;
   public message: string | null = null;
   public success: boolean = true;
 

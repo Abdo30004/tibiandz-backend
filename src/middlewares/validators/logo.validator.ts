@@ -15,7 +15,7 @@ export class LogoValidator {
         min: 1
       })
       .withMessage('Invalid limit number')
-  ]; 
+  ];
 
   static submit = [
     body('name').isString().notEmpty().withMessage('Invalid name'),
