@@ -32,4 +32,13 @@ const fileSchema = new Schema<File>(
   }
 );
 
+fileSchema.set('toJSON', {
+  transform: (_, ret) => {
+    ret.id = ret._id;
+
+    delete ret._id;
+    return ret;
+  }
+});
+
 export const FileModel = model<File>('files', fileSchema);

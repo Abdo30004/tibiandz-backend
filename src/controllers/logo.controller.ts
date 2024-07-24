@@ -25,6 +25,45 @@ export class LogoController {
 
     res.json(successResponse);
   }
+
+  static async getNewLogos(req: Request, res: Response) {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    const logos = await LogoService.getNew(page, limit);
+
+    if (!logos) {
+      const errorResponse = new ErrorResponse().setError('Error fetching logos');
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(errorResponse);
+    }
+
+    const successResponse = new SuccessResponse({
+      message: 'Logos fetched successfully',
+      data: logos
+    });
+
+    res.json(successResponse);
+  }
+
+  static async getPendingLogos(req: Request, res: Response) {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    const logos = await LogoService.getPending(page, limit);
+
+    if (!logos) {
+      const errorResponse = new ErrorResponse().setError('Error fetching logos');
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(errorResponse);
+    }
+
+    const successResponse = new SuccessResponse({
+      message: 'Logos fetched successfully',
+      data: logos
+    });
+
+    res.json(successResponse);
+  }
+
   static async getLogoById(req: Request, res: Response) {
     const id = req.params.id;
 
@@ -56,6 +95,32 @@ export class LogoController {
 
     const successResponse = new SuccessResponse({
       message: 'Logo created successfully',
+      data: logo
+    });
+
+    res.json(successResponse);
+  }
+
+  static async submitLogo(req: Request, res: Response) {
+    const { author, email, fileId, name, description } = req.body as Logo;
+
+    const logoData = {
+      author,
+      email,
+      fileId,
+      name,
+      description
+    };
+
+    const logo = await LogoService.submit(logoData as Logo);
+
+    if (!logo) {
+      const errorResponse = new ErrorResponse().setError('Error creating logo');
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(errorResponse);
+    }
+
+    const successResponse = new SuccessResponse({
+      message: 'Logo submitted successfully',
       data: logo
     });
 

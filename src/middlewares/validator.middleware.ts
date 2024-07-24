@@ -4,7 +4,13 @@ import { StatusCodes } from 'http-status-codes';
 import { ErrorResponse } from '../utils/response';
 
 import type { NextFunction, Request, Response } from 'express';
-
+/**
+ * @description Middleware to validate the request and check for errors
+ * @param req  the request object
+ * @param res  the response object
+ * @param next the next function
+ * @returns
+ */
 export function validator(req: Request, res: Response, next: NextFunction) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

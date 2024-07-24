@@ -66,5 +66,15 @@ logoSchema.pre('save', async function (next) {
 
   next();
 });
+logoSchema.set('toJSON', {
+  transform: function (doc, ret, options) {
+    ret.id = ret._id;
+    ret.file = ret.fileId;
+
+    delete ret.fileId;
+    delete ret._id;
+    return ret;
+  }
+});
 
 export const LogoModel = model<Logo>('logos', logoSchema);

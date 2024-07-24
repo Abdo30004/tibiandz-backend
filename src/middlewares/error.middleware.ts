@@ -5,6 +5,11 @@ import { ErrorResponse } from '../utils/response';
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
 
 export class ErrorHandler {
+  /**
+   * @description Handles async request handlers and catches any errors
+   * @param handler the request handler function
+   * @returns
+   */
   static asyncHandler(handler: RequestHandler) {
     return (req: Request, res: Response, next: NextFunction) => {
       return Promise.resolve(handler(req, res, next)).catch(next);

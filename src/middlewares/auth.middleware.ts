@@ -6,6 +6,13 @@ import { ErrorResponse } from '../utils/response';
 
 import type { NextFunction, Request, Response } from 'express';
 
+/**
+ * @description Middleware to check if the user as admin is authenticated
+ * @param req the request object
+ * @param res the response object
+ * @param next the next function
+ * @returns
+ */
 export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const token = req.headers['authorization'];
 

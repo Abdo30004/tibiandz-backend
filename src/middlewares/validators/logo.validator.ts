@@ -2,7 +2,7 @@ import { body, param, query } from 'express-validator';
 
 export class LogoValidator {
   static byId = [param('id').isMongoId().withMessage('Invalid ID')];
-  static getAll = [
+  static pagination = [
     query('page')
       .optional()
       .isInt({
@@ -28,13 +28,16 @@ export class LogoValidator {
   static create = [
     ...LogoValidator.submit,
     body('label').optional().isIn(['new', 'old', 'none']).withMessage('Invalid label'),
-    body('tags').optional().isArray().withMessage('Invalid tags'),
-    body('approved').isBoolean().withMessage('Invalid approved')
+    body('tags').optional().isArray().withMessage('Invalid tags')
   ];
 
   static update = [...LogoValidator.byId, ...LogoValidator.submit.map(validator => validator.optional())];
 
   static autocomplete = [query('q').isString().notEmpty().withMessage('Invalid search query')];
 
-  static search = [...LogoValidator.autocomplete, ...LogoValidator.getAll];
+  static search = [
+    ...LogoValidator.autocomplete,
+    ...LogoValidator.pagination,
+    query('filter').optional().isIn(['new', 'old', 'none']) //.withMessage('Invalid filter')
+  ];
 }

@@ -7,9 +7,44 @@ import type { Logo } from '../types/database';
 export class LogoService {
   static async getAll(page: number, limit: number) {
     try {
-      const logos = await LogoModel.find()
+      const logos = await LogoModel.find({
+        approved: true
+      })
         .skip((page - 1) * limit)
-        .limit(limit);
+        .limit(limit)
+        .populate('fileId');
+
+      return logos;
+    } catch {
+      return null;
+    }
+  }
+
+  static async getNew(page: number, limit: number) {
+    try {
+      const logos = await LogoModel.find({
+        label: 'new',
+        approved: true
+      })
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .populate('fileId');
+
+      return logos;
+    } catch {
+      return null;
+    }
+  }
+
+  static async getPending(page: number, limit: number) {
+    try {
+      const logos = await LogoModel.find({
+        approved: false
+      })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .populate('fileId');
 
       return logos;
     } catch {
@@ -19,11 +54,23 @@ export class LogoService {
 
   static async getById(id: string) {
     try {
-      const logo = await LogoModel.findById(id);
+      const logo = await LogoModel.findById(id).populate('fileId');
       return logo;
     } catch {
       return null;
     }
+  }
+
+  static async submit(logoData: Logo) {
+    const logo = await LogoService.create({
+      ...logoData,
+      approved: false
+    });
+    if (!logo) {
+      return false;
+    }
+
+    return true;
   }
 
   static async create(logoData: Logo) {
@@ -35,7 +82,10 @@ export class LogoService {
         return null;
       }
 
-      const logo = await LogoModel.create(logoData);
+      const logo = await LogoModel.create({
+        ...logoData,
+        approved: false
+      });
       return logo;
     } catch (err) {
       console.log(err);
@@ -95,8 +145,9 @@ export class LogoService {
   static async search(query: string): Promise<Logo[] | null> {
     try {
       const logos = await LogoModel.find({
-        $or: [{ name: { $regex: query, $options: 'i' } }, { description: { $regex: query, $options: 'i' } }]
-      });
+        $or: [{ name: { $regex: query, $options: 'i' } }, { description: { $regex: query, $options: 'i' } }],
+        approved: true
+      }).populate('fileId');
 
       return logos;
     } catch {
@@ -107,7 +158,8 @@ export class LogoService {
   static async autoComplete(query: string): Promise<string[] | null> {
     try {
       const logos = await LogoModel.find({
-        name: { $regex: query, $options: 'i' }
+        name: { $regex: query, $options: 'i' },
+        approved: true
       }).limit(10);
 
       return logos.map(logo => logo.name);

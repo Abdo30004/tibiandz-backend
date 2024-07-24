@@ -7,7 +7,9 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}-${file.originalname}`);
   }
 });
-
+/**
+ * @description Middleware to upload files
+ */
 export const upload = multer({
   storage
 });
