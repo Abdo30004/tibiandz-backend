@@ -69,7 +69,7 @@ export class LogoController {
 
     const logo = await LogoService.getById(id);
 
-    if (!logo) {
+    if (!logo || !logo.approved) {
       const errorResponse = new ErrorResponse().setError('Logo not found');
       return res.status(StatusCodes.NOT_FOUND).json(errorResponse);
     }

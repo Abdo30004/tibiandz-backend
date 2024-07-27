@@ -30,5 +30,5 @@ router
   .put(LogoValidator.update, validator, LogoController.updateLogo) //require admin
   .delete(LogoController.deleteLogo); //require admin
 
-router.route('/:id/approve').post(LogoValidator.byId, validator, LogoController.approveLogo); //require admin
-router.route('/:id/reject').post(LogoValidator.byId, validator, LogoController.rejectLogo); //require admin
+router.route('/:id/approve').put(LogoValidator.byId, validator, LogoController.approveLogo); //require admin
+router.route('/:id/reject').put(LogoValidator.byId, validator, LogoController.rejectLogo); //require admin

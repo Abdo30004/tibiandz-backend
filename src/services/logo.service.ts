@@ -76,7 +76,6 @@ export class LogoService {
   static async create(logoData: Logo) {
     try {
       const file = await FileModel.findById({ _id: logoData.fileId });
-      console.log(file);
       if (!file) {
         console.log('File not found');
         return null;

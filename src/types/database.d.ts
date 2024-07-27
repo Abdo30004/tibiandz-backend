@@ -5,6 +5,14 @@ export declare interface Admin {
   password: string;
 }
 
+interface ApiResponse<T> {
+  data: T
+  message: string;
+  success: boolean;
+}
+
+
+
 export declare interface Logo {
   _id: string;
   name: string;
