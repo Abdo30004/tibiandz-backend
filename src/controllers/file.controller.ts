@@ -33,6 +33,7 @@ export class FileController {
       const errorResponse = new ErrorResponse({
         error: 'Invalid file type. Only SVG, AI, and EPS files are allowed'
       });
+      await fs.unlink(file.path).catch(() => {});
       return res.status(StatusCodes.BAD_REQUEST).json(errorResponse);
     }
 
