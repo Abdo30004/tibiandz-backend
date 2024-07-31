@@ -84,9 +84,7 @@ export class LogoController {
 
   static async createLogo(req: Request, res: Response) {
     const logoData = req.body as Logo;
-    console.log(logoData);
-
-    const logo = await LogoService.create(logoData);
+    const logo = await LogoService.createLogoAdmin(logoData);
 
     if (!logo) {
       const errorResponse = new ErrorResponse().setError('Error creating logo');

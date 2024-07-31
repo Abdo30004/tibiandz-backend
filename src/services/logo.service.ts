@@ -73,6 +73,14 @@ export class LogoService {
     return true;
   }
 
+  static async createLogoAdmin(logoData: Logo) {
+    const logo = await LogoService.create({
+      ...logoData,
+      approved: true
+    });
+    return logo;
+  }
+
   static async create(logoData: Logo) {
     try {
       const file = await FileModel.findById({ _id: logoData.fileId });
@@ -82,8 +90,7 @@ export class LogoService {
       }
 
       const logo = await LogoModel.create({
-        ...logoData,
-        approved: false
+        ...logoData
       });
       return logo;
     } catch (err) {
@@ -133,9 +140,8 @@ export class LogoService {
 
   static async reject(id: string) {
     try {
-      await LogoModel.updateOne({ _id: id }, { approved: false });
-
-      return true;
+      const deleted = await LogoService.delete(id);
+      return deleted;
     } catch {
       return false;
     }
