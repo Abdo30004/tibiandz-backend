@@ -3,6 +3,7 @@ import { FileModel } from '../database/models/file.model';
 import { LogoModel } from '../database/models/logo.model';
 
 import type { Logo } from '../types/database';
+import type { FilterQuery } from 'mongoose';
 
 export class LogoService {
   static async getAll(page: number, limit: number) {
@@ -147,38 +148,30 @@ export class LogoService {
     }
   }
 
-static async search(query: string | null): Promise<Logo[] | null> {
-  try {
-    let logos;
-
-    if (!query || query === "") {
-      logos = await LogoModel.find({ approved: true })
-        .sort({ createdAt: -1 }) // Sorting by creation date (descending) as an example
-        .limit(5)
-        .populate('fileId');
-    } else {
-      // Search based on the query
-      logos = await LogoModel.find({
-        $or: [
-          { name: { $regex: query, $options: 'i' } },
-          { description: { $regex: query, $options: 'i' } },
-        ],
-        approved: true,
-      }).populate('fileId');
-    }
-
-    return logos;
-  } catch {
-    return null;
-  }
-}
-
-  static async autoComplete(query: string): Promise<string[] | null> {
+  static async search(query: string): Promise<Logo[] | null> {
     try {
       const logos = await LogoModel.find({
-        name: { $regex: query, $options: 'i' },
+        $or: [{ name: { $regex: query, $options: 'i' } }, { description: { $regex: query, $options: 'i' } }],
         approved: true
-      }).limit(10);
+      }).populate('fileId');
+
+      return logos;
+    } catch {
+      return null;
+    }
+  }
+
+  static async autoComplete(query: string | undefined): Promise<string[] | null> {
+    try {
+      let filter: FilterQuery<Logo>;
+
+      if (!query || query.trim() === '') {
+        filter = { approved: true };
+      } else {
+        filter = { name: { $regex: query, $options: 'i' }, approved: true };
+      }
+
+      const logos = await LogoModel.find(filter).limit(5);
 
       return logos.map(logo => logo.name);
     } catch {
