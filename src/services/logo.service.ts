@@ -147,18 +147,31 @@ export class LogoService {
     }
   }
 
-  static async search(query: string): Promise<Logo[] | null> {
-    try {
-      const logos = await LogoModel.find({
-        $or: [{ name: { $regex: query, $options: 'i' } }, { description: { $regex: query, $options: 'i' } }],
-        approved: true
-      }).populate('fileId');
+static async search(query: string | null): Promise<Logo[] | null> {
+  try {
+    let logos;
 
-      return logos;
-    } catch {
-      return null;
+    if (!query || query === "") {
+      logos = await LogoModel.find({ approved: true })
+        .sort({ createdAt: -1 }) // Sorting by creation date (descending) as an example
+        .limit(5)
+        .populate('fileId');
+    } else {
+      // Search based on the query
+      logos = await LogoModel.find({
+        $or: [
+          { name: { $regex: query, $options: 'i' } },
+          { description: { $regex: query, $options: 'i' } },
+        ],
+        approved: true,
+      }).populate('fileId');
     }
+
+    return logos;
+  } catch {
+    return null;
   }
+}
 
   static async autoComplete(query: string): Promise<string[] | null> {
     try {
