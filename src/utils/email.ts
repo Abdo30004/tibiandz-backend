@@ -42,18 +42,5 @@ class EmailService {
   }
 }
 
-EmailService.sendSubmissionEmail({
-  name: 'Logo Name',
-  description: 'Logo Description',
-  email: 'kasepop2017@gmail.com',
-  approved: false,
-  label: 'new',
-  tags: ['tag1', 'tag2'],
-  author: 'Author Name',
-  fileId: 'fileId',
-  _id: 'id'
-}).then(() => {
-  console.log('Email sent');
-});
 
 export { EmailService };
